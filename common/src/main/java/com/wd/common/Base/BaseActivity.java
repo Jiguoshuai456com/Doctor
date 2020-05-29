@@ -5,15 +5,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
     P mPresenter;
+    private Unbinder bind;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
-        ButterKnife.bind(this);
+        bind = ButterKnife.bind(this);
         mPresenter = initPresenter();
         initView();
         initData();
@@ -26,6 +29,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        bind.unbind();
+
         if (mPresenter!=null){
             mPresenter.detachView();
             mPresenter = null;

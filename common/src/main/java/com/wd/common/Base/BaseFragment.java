@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     P mPresenter;
 
     public boolean isChang;
+    private Unbinder bind;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,6 +54,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.i("xxx","onDestroyView");
+        bind.unbind();
     }
 
     @Nullable
@@ -59,7 +62,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getContext(),getLayout(),null);
         initView(view);
-        ButterKnife.bind(this,view);
+        bind = ButterKnife.bind(this, view);
         isChang = true;
         doNetWork();
         return view;
